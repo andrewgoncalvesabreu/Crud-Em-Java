@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UsuarioDAO {
     public void create(Usuario usuario) { //insere um usuario
-        String sql = "INSERT INTO usuario (usuario, senha) VALUES (?,?)";//o comando SQL
+        String sql = "INSERT INTO Usuario (usuario, senha) VALUES (?,?)";//o comando SQL
 
         try (Connection conn = ConnectionFactory.fazConexao();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -29,7 +29,7 @@ public class UsuarioDAO {
     }
 
     public List<Usuario> read() {
-        String sql = "SELECT * FROM usuario";
+        String sql = "SELECT * FROM Usuario";
         List<Usuario> usuarios = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.fazConexao();
@@ -54,7 +54,7 @@ public class UsuarioDAO {
     } //read vai me retornar todos os usuarios do sistema.
 
     public void update(Usuario usuario) { //updatar um usuario especifico
-        String sql = "UPDATE usuario SET usuario = ?, senha = ? WHERE id = ?";
+        String sql = "UPDATE Usuario SET usuario = ?, senha = ? WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.fazConexao();
             PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -70,17 +70,50 @@ public class UsuarioDAO {
     }
 
     public void delete(int id) {
-        String sql = "DELETE FROM usuario WHERE id = ?";
+        String sql = "DELETE FROM Usuario WHERE id = ?";
 
-        try(Connection conn = ConnectionFactory.fazConexao();
+        try( Connection conn = ConnectionFactory.fazConexao();
             PreparedStatement statement = conn.prepareStatement(sql)) {
 
             statement.setInt(1, id);
-            statement.execute();
+
+            int linhasAfetadas = statement.executeUpdate();
+
+            if (linhasAfetadas == 0) {
+                System.out.println("Nenhum usuário encontrado com esse ID");
+            } else {
+                System.out.println("Usuário deletado!");
+            }
 
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Usuario> buscarPorLetra(String letra) {
+        String sql = "SELECT * FROM Usuario WHERE usuario LIKE ?";
+        List<Usuario> usuariosEspecificos = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.fazConexao();
+             PreparedStatement statement = conn.prepareStatement(sql);) {
+
+            statement.setString(1,letra + "%");
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));
+                usuario.setUsuario(rs.getString("usuario"));
+                usuario.setSenha(rs.getString("senha"));
+
+                usuariosEspecificos.add(usuario);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return usuariosEspecificos;
     }
 }

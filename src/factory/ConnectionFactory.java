@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
-    private static final String url = "jdbc:mysql://localhost:3306/db_senhas";
-    private static final String user = "root";
-    private static final String password = "Maf08041973.";
+    private static final String url = "jdbc:mysql://sql.freedb.tech:3306/freedb_db-andrew";
+    private static final String user = "freedb_freedb_user321";
+    private static final String password = "cV%Z&F8A5bqDKew";
 
     public static Connection fazConexao(){
 

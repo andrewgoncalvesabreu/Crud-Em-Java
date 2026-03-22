@@ -20,6 +20,7 @@ public class TesteBanco {
             System.out.println("2. VER USUÁRIOS CADASTRADOS");
             System.out.println("3. ALTERAR UM USUÁRIO");
             System.out.println("4. DELETAR UM USUÁRIO");
+            System.out.println("5. BUSCAR POR LETRA ESPECÍFICA");
             System.out.println("0. SAIR");
             System.out.println("ESCOLHA UMA OPÇÃO: ");
             opcao = teclado.nextInt();
@@ -35,6 +36,9 @@ public class TesteBanco {
                     operacoes.create(novo);
                     System.out.println("Continuar? (s/n)");
                     continua = TesteBanco.confirmacao(teclado.nextLine());
+                    if (continua == 0) {
+                        opcao = 0;
+                    }
 
                     break;
                 case 2:
@@ -45,6 +49,9 @@ public class TesteBanco {
                     }
                     System.out.println("Continuar? (s/n)");
                     continua = TesteBanco.confirmacao(teclado.nextLine());
+                    if (continua == 0) {
+                        opcao = 0;
+                    }
                     break;
                 case 3:
                     System.out.println("ID do usuário a ser alterado: ");
@@ -61,6 +68,9 @@ public class TesteBanco {
                     System.out.println("Usuário Atualizado!");
                     System.out.println("Continuar? (s/n)");
                     continua = TesteBanco.confirmacao(teclado.nextLine());
+                    if (continua == 0) {
+                        opcao = 0;
+                    }
                     break;
                 case 4:
                     System.out.println("Digite o ID do usuário a ser deletado: ");
@@ -72,15 +82,41 @@ public class TesteBanco {
 
                     if (confirmacao.equalsIgnoreCase("s")){
                         operacoes.delete(idASerExcluido);
-                        System.out.println("Usuário deletado!");
                     } else {
                         System.out.println("Operação encerrada.");
                     }
                     System.out.println("Continuar? (s/n)");
                     continua = TesteBanco.confirmacao(teclado.nextLine());
+                    if (continua == 0) {
+                        opcao = 0;
+                    }
+                    break;
+                case 5:
+                    System.out.println("Digite a letra inicial que você busca");
+                    String letra = teclado.nextLine();
+
+                    List<Usuario> usuariosPorLetra = operacoes.buscarPorLetra(letra);
+
+                    if (usuariosPorLetra.isEmpty()) {
+                        System.out.println("Nenhum usuário encontrado.");
+                    } else {
+                        System.out.println("--Usuários Encontrados--");
+                        for (Usuario u : usuariosPorLetra) {
+                            System.out.println(u);
+                        }
+                    }
+
+                    System.out.println("Continuar? (s/n)");
+                    continua = TesteBanco.confirmacao(teclado.nextLine());
+                    if (continua == 0) {
+                        opcao = 0;
+                    }
                     break;
                 case 0:
                     opcao = 0;
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
                     break;
             }
         }
